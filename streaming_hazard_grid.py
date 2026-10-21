@@ -233,6 +233,11 @@ class StreamingHazardGrid:
         with self._lock:
             return self._snapshot_locked(now)
 
+    def weather_observation(self) -> WeatherObservation | None:
+        """Return the current cached weather sample, without exposing mutable grid state."""
+        with self._lock:
+            return self._weather
+
     def _build_features_locked(self, cell_id: CellId, now: float) -> dict[str, float | None]:
         current = self._cells.get(cell_id)
         features: dict[str, float | None] = {}
