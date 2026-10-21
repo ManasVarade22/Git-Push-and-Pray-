@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10171b">
+  <title>Aerial Hazard | Live Grid</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="/assets/dashboard.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand-mark" aria-hidden="true">AH</div>
+    <div class="brand-copy"><strong>AERIAL HAZARD</strong><span>Atmosphere monitoring · live grid</span></div>
+    <div class="connection"><span id="connection-dot" class="dot offline"></span><span id="connection-label">Connecting</span></div>
+    <time id="updated-at">Waiting for first snapshot</time>
+  </header>
+
+  <section class="source-strip" aria-label="Data source labels">
+    <div><span class="source-title">TELEMETRY</span><span id="telemetry-source" class="source-badge">UNVERIFIED SOURCE</span></div>
+    <div><span class="source-title">RISK MODEL</span><span id="model-source" class="source-badge">NO MODEL LOADED</span></div>
+    <div><span class="source-title">WEATHER</span><span id="weather-source" class="source-badge">UNVERIFIED SOURCE</span></div>
+    <p class="source-note">Source labels describe provenance. Unknown or missing values stay unknown.</p>
+  </section>
+
+  <main class="layout">
+    <section class="map-column">
+      <div class="section-heading">
+        <div><span class="eyebrow">SPATIAL VIEW</span><h1>Hazard grid</h1></div>
+        <div class="grid-meta"><span id="cell-count">0 cells</span><span id="grid-size">— m cells</span></div>
+      </div>
+      <div class="legend" aria-label="Risk legend">
+        <span><i class="swatch high"></i>High risk</span><span><i class="swatch elevated"></i>Elevated</span><span><i class="swatch low"></i>Below clear</span><span><i class="swatch unknown"></i>Unavailable</span><span><i class="swatch stale"></i>Stale</span>
+      </div>
+      <div id="map" role="application" aria-label="Live Leaflet hazard map"></div>
+      <p class="map-footnote">Cells show the last accepted in-memory grid state. Gray dashed cells are stale; they do not imply a safe reading.</p>
+    </section>
+
+    <aside class="side-column">
+      <section class="panel selected-panel">
+        <div class="panel-heading"><div><span class="eyebrow">CELL INSPECTOR</span><h2 id="selected-title">Select a cell</h2></div><span id="selected-freshness" class="pill neutral">NO SELECTION</span></div>
+        <div id="selected-content" class="empty-state">Choose a grid cell to inspect its latest readings and status.</div>
+      </section>
+
+      <section class="panel alerts-panel">
+        <div class="panel-heading"><div><span class="eyebrow">RESPONSE</span><h2>Active alerts</h2></div><span id="alert-count" class="count-badge">0</span></div>
+        <div id="alerts-list" class="alert-list"><p class="empty-state">No active alerts reported.</p></div>
+      </section>
+
+      <section class="panel health-panel">
+        <div class="panel-heading"><div><span class="eyebrow">SYSTEM</span><h2>Connection health</h2></div></div>
+        <div id="health-content" class="health-grid"><p class="empty-state">Waiting for backend health details.</p></div>
+      </section>
+    </aside>
+  </main>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="/assets/dashboard.js"></script>
+</body>
+</html>
+
