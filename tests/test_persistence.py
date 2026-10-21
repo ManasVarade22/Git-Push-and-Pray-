@@ -116,7 +116,7 @@ class PersistenceUnitTests(unittest.TestCase):
         self.assertEqual((reading.drone_id, reading.sequence), (1, 6))
         self.assertEqual(len(reading.sensor_readings), 6)
 
-    def test_acknowledgement_is_not_confirmed_when_commit_fails(self):
+    def test_acknowledgement_is_not_confirmed_when_repository_save_fails(self):
         class FailNextSave:
             def __init__(self):
                 self.rows = {}
