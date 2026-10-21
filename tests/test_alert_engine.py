@@ -146,7 +146,7 @@ class AlertEngineTests(unittest.TestCase):
         self.assertEqual(self.machine.tick(), [])
         self.assertTrue(self.machine.state_for(self.cell).hazard_active)
 
-    def test_acknowledgement_and_active_alert_recover_from_repository_restart(self):
+    def test_acknowledgement_and_active_alert_reconstruct_from_in_memory_repository(self):
         event = self._raise_alert()
         self.assertTrue(self.machine.acknowledge(event.alert_id, "operator-2", now=3))
         recovered = PerCellAlertStateMachine(config(), self.repository, clock=self.clock)
