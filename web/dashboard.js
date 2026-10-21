@@ -158,11 +158,12 @@
       $("alerts-list").innerHTML = '<p class="empty-state">No active alerts reported.</p>';
       return;
     }
+    const durableAck = Boolean(latestSnapshot?.data.health.acknowledgement_store.durable);
     $("alerts-list").innerHTML = alerts.map((alert) => `<article class="alert-card ${alert.acknowledged ? "acknowledged" : ""}">
       <div class="alert-top"><span class="alert-title">${alert.acknowledged ? "Acknowledged" : "Action required"} · cell ${esc(alert.cell_id)}</span><span class="alert-state">Level ${esc(alert.escalation_level)}</span></div>
       <div class="alert-meta">${esc(alert.id)}<br>Raised ${esc(stamp(alert.raised_at))} · last notified ${esc(stamp(alert.last_notified_at))}</div>
       <div class="alert-actions"><span class="alert-meta">${alert.acknowledged ? `Ack by ${esc(alert.acknowledged_by)} · hazard remains active` : "Hazard remains active until risk clears"}</span>
-        ${alert.acknowledged ? "" : `<button class="button" data-ack="${esc(alert.id)}">Acknowledge</button>`}</div>
+        ${alert.acknowledged ? "" : durableAck ? `<button class="button" data-ack="${esc(alert.id)}">Acknowledge</button>` : `<span class="alert-state">PostgreSQL required</span>`}</div>
     </article>`).join("");
     document.querySelectorAll("[data-ack]").forEach((button) => button.addEventListener("click", () => acknowledge(button.dataset.ack, button)));
   }
