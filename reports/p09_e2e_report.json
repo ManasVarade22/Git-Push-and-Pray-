@@ -1,0 +1,98 @@
+{
+  "database_or_hardware_used": false,
+  "generated_at_utc": "2026-10-21T17:36:59Z",
+  "passed": true,
+  "project": "Aerial Hazard Detection streaming telemetry",
+  "report_schema_version": 1,
+  "reproducibility": {
+    "commands": [
+      "python -m unittest -v tests.test_e2e_lossy_udp",
+      "python e2e_verification.py --json-report reports/p09_e2e_report.json --summary-report reports/p09_e2e_summary.md"
+    ],
+    "default_seed": 20261021
+  },
+  "scenarios": [
+    {
+      "configuration": {
+        "corruption_probability": 0.05,
+        "drop_probability": 0.3,
+        "duplicate_probability": 0.1,
+        "max_delay_seconds": 0.025,
+        "reorder_window_seconds": 2.0,
+        "seed": 20261021
+      },
+      "counts": {
+        "accepted": 236,
+        "alerts_raised": 0,
+        "corrupted": 21,
+        "crc_rejected": 21,
+        "deduplicated": 17,
+        "dropped": 180,
+        "duplicated": 46,
+        "grid_updates": 236,
+        "late": 0,
+        "received": 378,
+        "rejected": 142,
+        "risk_evaluations": 0,
+        "sent": 378
+      },
+      "emitted_udp_datagrams": 378,
+      "grid_version": 236,
+      "observed_drop_fraction_per_transmitted_copy": 0.3225806451612903,
+      "observed_duplicate_attempt_fraction_per_source_frame": 0.08984375,
+      "passed": true,
+      "scenario": "seeded_lossy_localhost_udp",
+      "source_frames": 512,
+      "source_interval_seconds": 0.002,
+      "wire_order_reordered": true
+    },
+    {
+      "alert_active": true,
+      "configuration": {
+        "clear_threshold": 0.3,
+        "clock": "controllable logical time; no two-second wall sleep",
+        "entry_threshold": 0.8,
+        "reorder_window_seconds": 2.0,
+        "stale_timeout_seconds": 5
+      },
+      "counts": {
+        "accepted": 12,
+        "alerts_raised": 1,
+        "corrupted": 1,
+        "crc_rejected": 1,
+        "deduplicated": 1,
+        "dropped": 0,
+        "duplicated": 1,
+        "grid_updates": 12,
+        "late": 1,
+        "received": 15,
+        "rejected": 3,
+        "risk_evaluations": 11,
+        "sent": 15
+      },
+      "grid_version": 13,
+      "invariants": {
+        "arrival_after_window_was_late": true,
+        "bad_crc_did_not_mutate_grid": true,
+        "buffered_packet_did_not_mutate_grid_before_gap_filled": true,
+        "database_isolated": true,
+        "duplicate_did_not_mutate_grid": true,
+        "reorder_window_released_pending_packet": true,
+        "risk_evaluated_once_for_each_center_frame": true,
+        "sequence_wraparound_order": true,
+        "stale_cell_transition": true,
+        "three_consecutive_high_predictions_raised_alert": true
+      },
+      "passed": true,
+      "risk_evaluator_calls_after_three_center_frames": 3,
+      "scenario": "wraparound_crc_reorder_grid_stale_alert",
+      "sequence_processing_order": [
+        65534,
+        65535,
+        0,
+        2
+      ]
+    }
+  ]
+}
+
