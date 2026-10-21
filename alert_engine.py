@@ -387,6 +387,11 @@ class PerCellAlertStateMachine:
             state = self._states.get(cell_id)
             return replace(state) if state is not None else None
 
+    def states_snapshot(self) -> dict[tuple[int, int], CellAlertState]:
+        """Return detached alert-state copies for read-only dashboard views."""
+        with self._lock:
+            return {cell_id: replace(state) for cell_id, state in self._states.items()}
+
     def _raise(self, state: CellAlertState, score: float, now: float) -> AlertEvent:
         state.hazard_active = True
         state.alert_id = str(uuid4())
