@@ -326,10 +326,15 @@ class PerCellAlertStateMachine:
                 return False
             if state.acknowledged_at is not None:
                 return True
-            state.acknowledged_at = now
-            state.acknowledged_by = acknowledged_by
-            state.updated_at = now
-            self._persist(state)
+            # Persist a candidate first. If PostgreSQL is unavailable or the
+            # transaction fails, the in-memory state must remain unacknowledged
+            # so callers cannot mistake an uncommitted acknowledgement as done.
+            candidate = replace(state)
+            candidate.acknowledged_at = now
+            candidate.acknowledged_by = acknowledged_by
+            candidate.updated_at = now
+            self._persist(candidate)
+            self._states[state.cell_id] = candidate
             return True
 
     def tick(self, *, now: float | None = None) -> list[AlertEvent]:
